@@ -15,8 +15,7 @@
         "media": {
           "$type": "app.bsky.embed.external",
           "external": {
-            "description": "One of the top charity organizations who help the Ukraine Army since 2014. Don
-ate via the website - 100% of proceeds go directly to Ukraine Army.",
+            "description": "One of the top charity organizations who help the Ukraine Army since 2014. Donate via the website - 100% of proceeds go directly to Ukraine Army.",
             "title": "Come Back Alive Foundation - Charity Organization",
             "uri": "https://savelife.in.ua/en/"
           }
