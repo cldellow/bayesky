@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"strconv"
-//	"strings"
+	// "strings"
 )
 
 // Try to model the parts of Bluesky posts that we care about,
@@ -103,5 +103,3 @@ func ParsePost(line []byte) (Post, error) {
 
 	return post, nil
 }
-
-

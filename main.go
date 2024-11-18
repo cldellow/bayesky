@@ -5,7 +5,7 @@ import (
 	"bayesky/source"
 	"bytes"
 	"fmt"
-//	"strings"
+	// "strings"
 )
 
 func main() {
@@ -42,9 +42,9 @@ func main() {
 			continue
 		}
 		/*
-		if !strings.Contains(line, `"langs":["en"]`) {
-			continue
-		}
+			if !strings.Contains(line, `"langs":["en"]`) {
+				continue
+			}
 		*/
 
 		_, err = events.ParsePost(line)

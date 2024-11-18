@@ -26,7 +26,7 @@ func NewFileSource(filename string) (*FileSource, error) {
 	}, nil
 }
 
-//func (fs *FileSource) Next() (string, error) {
+// func (fs *FileSource) Next() (string, error) {
 func (fs *FileSource) Next() ([]byte, error) {
 	if fs.scanner.Scan() {
 		//line := fs.scanner.Text()
