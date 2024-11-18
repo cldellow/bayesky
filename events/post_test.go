@@ -107,3 +107,27 @@ func TestParsePostImages(t *testing.T) {
 	assert.Equal(t, "image/jpeg", post.Images[1].MimeType)
 	assert.Equal(t, uint64(156550), post.Images[1].Size)
 }
+
+func TestParsePostExternalWithThumb(t *testing.T) {
+	postBytes, err := Load("testdata/external-with-thumb.json")
+	assert.Nil(t, err)
+
+	_, err = ParsePost(postBytes)
+	assert.Nil(t, err)
+}
+
+func TestParsePostFacets(t *testing.T) {
+	postBytes, err := Load("testdata/facets.json")
+	assert.Nil(t, err)
+
+	_, err = ParsePost(postBytes)
+	assert.Nil(t, err)
+}
+
+func TestParsePostVideo(t *testing.T) {
+	postBytes, err := Load("testdata/video.json")
+	assert.Nil(t, err)
+
+	_, err = ParsePost(postBytes)
+	assert.Nil(t, err)
+}

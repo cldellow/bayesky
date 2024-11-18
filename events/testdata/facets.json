@@ -1,0 +1,78 @@
+{
+  "did": "did:plc:cl2pml72kqv5bctjcrhq3qcw",
+  "time_us": 1731748130239904,
+  "kind": "commit",
+  "commit": {
+    "rev": "3lb2k647x6m2m",
+    "operation": "create",
+    "collection": "app.bsky.feed.post",
+    "rkey": "3lb2k63druk2x",
+    "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2024-11-16T09:08:49.200Z",
+      "embed": {
+        "$type": "app.bsky.embed.recordWithMedia",
+        "media": {
+          "$type": "app.bsky.embed.external",
+          "external": {
+            "description": "One of the top charity organizations who help the Ukraine Army since 2014. Don
+ate via the website - 100% of proceeds go directly to Ukraine Army.",
+            "title": "Come Back Alive Foundation - Charity Organization",
+            "uri": "https://savelife.in.ua/en/"
+          }
+        },
+        "record": {
+          "$type": "app.bsky.embed.record",
+          "record": {
+            "cid": "bafyreigtpakaexd3xej2gr4dsqge7bwv6jige4oyglxahplao35t7ulriu",
+            "uri": "at://did:plc:vq3fn2jcelxumsyvq4entjl4/app.bsky.feed.post/3lb2ec4so3c22"
+          }
+        }
+      },
+      "facets": [
+        {
+          "features": [
+            {
+              "$type": "app.bsky.richtext.facet#tag",
+              "tag": "fellas"
+            }
+          ],
+          "index": {
+            "byteEnd": 11,
+            "byteStart": 4
+          }
+        },
+        {
+          "$type": "app.bsky.richtext.facet",
+          "features": [
+            {
+              "$type": "app.bsky.richtext.facet#mention",
+              "did": "did:plc:bmbrgpqto57vgstqfr2pavv2"
+            }
+          ],
+          "index": {
+            "byteEnd": 69,
+            "byteStart": 40
+          }
+        },
+        {
+          "features": [
+            {
+              "$type": "app.bsky.richtext.facet#link",
+              "uri": "https://savelife.in.ua/en/"
+            }
+          ],
+          "index": {
+            "byteEnd": 143,
+            "byteStart": 125
+          }
+        }
+      ],
+      "langs": [
+        "en"
+      ],
+      "text": "Hey #fellas, another great episode from @mykolabielieskov.bsky.social and Phillips.\n\nListen and please donate to world class savelife.in.ua/en/"
+    },
+    "cid": "bafyreibah2j5j337se7ir7psbhgnjqvg2atrzcdix3b5xugfsfwagbxgu4"
+  }
+}
