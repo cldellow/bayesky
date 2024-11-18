@@ -2,8 +2,6 @@ package source
 
 import (
 	"bufio"
-	"encoding/json"
-	"fmt"
 	"os"
 )
 
@@ -30,16 +28,8 @@ func NewFileSource(filename string) (*FileSource, error) {
 
 func (fs *FileSource) Next() (string, error) {
 	if fs.scanner.Scan() {
-		// Read the next line and return it as a string
 		line := fs.scanner.Text()
 
-		// Optionally, you can unmarshal the line into a struct if you want
-		var record map[string]interface{}
-		if err := json.Unmarshal([]byte(line), &record); err != nil {
-			return "", fmt.Errorf("failed to unmarshal JSON: %w", err)
-		}
-
-		// You can process or return the line here
 		return line, nil
 	}
 
