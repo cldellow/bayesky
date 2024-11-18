@@ -93,8 +93,10 @@ func ParsePost(line []byte) (Post, error) {
 		// eg https://gist.github.com/cldellow/f86506d6ec0065a3ea5deb2732f0c0a0
 		if type_ == "app.bsky.embed.recordWithMedia" {
 			var embedRecord = embed["record"].(map[string]interface{})
-			if embedRecord["uri"] != nil {
-				post.Quote_uri = embedRecord["uri"].(string)
+
+			var embedRecordRecord = embedRecord["record"].(map[string]interface{})
+			if embedRecordRecord["uri"] != nil {
+				post.Quote_uri = embedRecordRecord["uri"].(string)
 			}
 		}
 	}

@@ -1,0 +1,50 @@
+{
+  "did": "did:plc:frwulzyxodbxnhsfb7d4ijes",
+  "time_us": 1731748083356312,
+  "kind": "commit",
+  "commit": {
+    "rev": "3lb2k4oej4s26",
+    "operation": "create",
+    "collection": "app.bsky.feed.post",
+    "rkey": "3lb2k4ltbmk2b",
+    "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2024-11-16T09:07:59.376Z",
+      "embed": {
+        "$type": "app.bsky.embed.recordWithMedia",
+        "media": {
+          "$type": "app.bsky.embed.images",
+          "images": [
+            {
+              "alt": "Woman with a Luigi hat wearing a vacuum cleaner on her back in spooky lighting.",
+              "aspectRatio": {
+                "height": 1080,
+                "width": 1919
+              },
+              "image": {
+                "$type": "blob",
+                "ref": {
+                  "$link": "bafkreifbcyu7bacru2dllvhvyfntddwlj67yozyycuebsuquvl5zini4da"
+                },
+                "mimeType": "image/jpeg",
+                "size": 444761
+              }
+            }
+          ]
+        },
+        "record": {
+          "$type": "app.bsky.embed.record",
+          "record": {
+            "cid": "bafyreihovqejprjv2rniffayg5tga5itg4mifwzjisfvznn7oatn7ieqm4",
+            "uri": "at://did:plc:rkuir54pi47jak3r6pokk3xi/app.bsky.feed.post/3lb2imirpc22x"
+          }
+        }
+      },
+      "langs": [
+        "en"
+      ],
+      "text": "Post a picture of yourself to show the newbies what they are dealing with"
+    },
+    "cid": "bafyreiburnco5cw7jym4cd2ifnfwvlizfjtiwkdetgue4yrz4xrqwrvkvm"
+  }
+}
