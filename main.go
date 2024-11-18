@@ -3,11 +3,14 @@ package main
 import (
 	"bayesky/events"
 	"bayesky/source"
+	"bytes"
 	"fmt"
-	"strings"
+//	"strings"
 )
 
 func main() {
+	EnLangsBytes := []byte(`"langs":["en"]`)
+
 	// TODO: make the source configurable at the CLI
 	// ...and eventually support Jetstream as a source
 	fileSource, err := source.NewFileSource("data.json")
@@ -25,7 +28,7 @@ func main() {
 			fmt.Println("Error reading line:", err)
 			break
 		}
-		if line == "" {
+		if line == nil {
 			// End of file
 			break
 		}
@@ -35,18 +38,23 @@ func main() {
 		//
 		// NOTE: This has the side effect of filtering out non-posts,
 		//       so we probably want to loosen that up eventually.
+		if !bytes.Contains(line, EnLangsBytes) {
+			continue
+		}
+		/*
 		if !strings.Contains(line, `"langs":["en"]`) {
 			continue
 		}
+		*/
 
-		post, err := events.ParsePost(line)
+		_, err = events.ParsePost(line)
 		if err != nil {
 			fmt.Println("Error parsing post:", err)
 			return
 		}
 
-		fmt.Println(post)
-		fmt.Printf("https://bsky.app/profile/%s/post/%s\n", post.Did, post.Rkey)
+		// fmt.Println(post)
+		// fmt.Printf("https://bsky.app/profile/%s/post/%s\n", post.Did, post.Rkey)
 
 		//		fmt.Println(line)
 		//		fmt.Println(parsed)

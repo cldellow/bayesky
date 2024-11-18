@@ -26,20 +26,22 @@ func NewFileSource(filename string) (*FileSource, error) {
 	}, nil
 }
 
-func (fs *FileSource) Next() (string, error) {
+//func (fs *FileSource) Next() (string, error) {
+func (fs *FileSource) Next() ([]byte, error) {
 	if fs.scanner.Scan() {
-		line := fs.scanner.Text()
+		//line := fs.scanner.Text()
+		line := fs.scanner.Bytes()
 
 		return line, nil
 	}
 
 	// If the scanner reaches the end of the file
 	if err := fs.scanner.Err(); err != nil {
-		return "", err
+		return nil, err
 	}
 
 	// No more lines to read
-	return "", nil
+	return nil, nil
 }
 
 func (fs *FileSource) Close() error {

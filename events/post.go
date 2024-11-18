@@ -1,10 +1,11 @@
 package events
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"strconv"
-	"strings"
+//	"strings"
 )
 
 // Try to model the parts of Bluesky posts that we care about,
@@ -29,12 +30,10 @@ type Post struct {
 	Quote_uri string // commit.record.embed.record.uri
 }
 
-func ParsePost(line string) (Post, error) {
+func ParsePost(line []byte) (Post, error) {
 	var post Post
 	parsed := make(map[string]interface{})
-	// TODO: can we defer turning the bytes into a string
-	// in Source for an optimization here?
-	d := json.NewDecoder(strings.NewReader(line))
+	d := json.NewDecoder(bytes.NewReader(line))
 	d.UseNumber()
 	err := d.Decode(&parsed)
 	if err != nil {
