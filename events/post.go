@@ -5,11 +5,19 @@ import (
 	"encoding/json"
 	"errors"
 	"strconv"
-	// "strings"
 )
 
 // Try to model the parts of Bluesky posts that we care about,
 // while being gloriously ignorant of a lot of things.
+type Image struct {
+	Alt      string
+	MimeType string
+	Size     uint64
+	Height   uint64
+	Width    uint64
+	Link     string
+}
+
 type Post struct {
 	Did     string // did
 	Time_us uint64 // time_us
@@ -28,6 +36,8 @@ type Post struct {
 
 	// Is this a quote?
 	Quote_uri string // commit.record.embed.record.uri
+
+	Images []Image
 }
 
 func ParsePost(line []byte) (Post, error) {
@@ -82,6 +92,47 @@ func ParsePost(line []byte) (Post, error) {
 		var embed = record["embed"].(map[string]interface{})
 		var type_ = embed["$type"].(string)
 
+		if type_ == "app.bsky.embed.images" {
+			var images = embed["images"].([]interface{})
+
+			// This is gross, but I don't know how to do the type cast
+			// in a syntactically cleaner way and my gpt-4o credits
+			// have run out for today. :)
+			for _, interfaceImage := range images {
+				var image = interfaceImage.(map[string]interface{})
+				var img Image
+				img.Alt = image["alt"].(string)
+
+				var aspectRatio = image["aspectRatio"].(map[string]interface{})
+				var widthNumber = aspectRatio["width"].(json.Number)
+				width, err := strconv.ParseUint(string(widthNumber), 10, 64)
+				if err != nil {
+					return Post{}, err
+				}
+				var heightNumber = aspectRatio["height"].(json.Number)
+				height, err := strconv.ParseUint(string(heightNumber), 10, 64)
+				if err != nil {
+					return Post{}, err
+				}
+				img.Width = width
+				img.Height = height
+
+				var subimage = image["image"].(map[string]interface{})
+				var ref = subimage["ref"].(map[string]interface{})
+				img.Link = ref["$link"].(string)
+				img.MimeType = subimage["mimeType"].(string)
+
+				var sizeNumber = subimage["size"].(json.Number)
+				size, err := strconv.ParseUint(string(sizeNumber), 10, 64)
+				if err != nil {
+					return Post{}, err
+				}
+				img.Size = size
+
+				post.Images = append(post.Images, img)
+			}
+		}
+
 		// eg https://gist.github.com/cldellow/d6f5e01a86aa290745e5995c42fd4c7e
 		if type_ == "app.bsky.embed.record" {
 			var embedRecord = embed["record"].(map[string]interface{})
@@ -98,6 +149,47 @@ func ParsePost(line []byte) (Post, error) {
 			if embedRecordRecord["uri"] != nil {
 				post.Quote_uri = embedRecordRecord["uri"].(string)
 			}
+
+			var media = embed["media"].(map[string]interface{})
+			var images = media["images"].([]interface{})
+
+			// This is gross, but I don't know how to do the type cast
+			// in a syntactically cleaner way and my gpt-4o credits
+			// have run out for today. :)
+			for _, interfaceImage := range images {
+				var image = interfaceImage.(map[string]interface{})
+				var img Image
+				img.Alt = image["alt"].(string)
+
+				var aspectRatio = image["aspectRatio"].(map[string]interface{})
+				var widthNumber = aspectRatio["width"].(json.Number)
+				width, err := strconv.ParseUint(string(widthNumber), 10, 64)
+				if err != nil {
+					return Post{}, err
+				}
+				var heightNumber = aspectRatio["height"].(json.Number)
+				height, err := strconv.ParseUint(string(heightNumber), 10, 64)
+				if err != nil {
+					return Post{}, err
+				}
+				img.Width = width
+				img.Height = height
+
+				var subimage = image["image"].(map[string]interface{})
+				var ref = subimage["ref"].(map[string]interface{})
+				img.Link = ref["$link"].(string)
+				img.MimeType = subimage["mimeType"].(string)
+
+				var sizeNumber = subimage["size"].(json.Number)
+				size, err := strconv.ParseUint(string(sizeNumber), 10, 64)
+				if err != nil {
+					return Post{}, err
+				}
+				img.Size = size
+
+				post.Images = append(post.Images, img)
+			}
+
 		}
 	}
 

@@ -70,7 +70,14 @@ func TestParsePostQuoteImages(t *testing.T) {
 	assert.Equal(t, "Post a picture of yourself to show the newbies what they are dealing with", post.Text)
 	assert.Equal(t, "at://did:plc:rkuir54pi47jak3r6pokk3xi/app.bsky.feed.post/3lb2imirpc22x", post.Quote_uri)
 
-	// TODO: extract images and add tests
+	assert.Equal(t, 1, len(post.Images))
+	assert.Equal(t, "Woman with a Luigi hat wearing a vacuum cleaner on her back in spooky lighting.", post.Images[0].Alt)
+	assert.Equal(t, uint64(1919), post.Images[0].Width)
+	assert.Equal(t, uint64(1080), post.Images[0].Height)
+	assert.Equal(t, "bafkreifbcyu7bacru2dllvhvyfntddwlj67yozyycuebsuquvl5zini4da", post.Images[0].Link)
+	assert.Equal(t, "image/jpeg", post.Images[0].MimeType)
+	assert.Equal(t, uint64(444761), post.Images[0].Size)
+
 }
 
 func TestParsePostImages(t *testing.T) {
@@ -85,5 +92,18 @@ func TestParsePostImages(t *testing.T) {
 	assert.Equal(t, "3lb2k45g6qc2s", post.Rkey)
 	assert.Equal(t, "10 years old next year :(", post.Text)
 
-	// TODO: extract images and add tests
+	assert.Equal(t, 2, len(post.Images))
+	assert.Equal(t, "foo", post.Images[0].Alt)
+	assert.Equal(t, uint64(960), post.Images[0].Width)
+	assert.Equal(t, uint64(960), post.Images[0].Height)
+	assert.Equal(t, "bafkreien2xwiyz5m4nftsuac7ymbpnvpwcakr5fmrp45qca6psgvglyzxy", post.Images[0].Link)
+	assert.Equal(t, "image/jpeg", post.Images[0].MimeType)
+	assert.Equal(t, uint64(449738), post.Images[0].Size)
+
+	assert.Equal(t, "", post.Images[1].Alt)
+	assert.Equal(t, uint64(497), post.Images[1].Width)
+	assert.Equal(t, uint64(604), post.Images[1].Height)
+	assert.Equal(t, "bafkreiaq3uz7vfluz3nejy34wqmxl6fizlunhnmymnszewomemh2jgou2y", post.Images[1].Link)
+	assert.Equal(t, "image/jpeg", post.Images[1].MimeType)
+	assert.Equal(t, uint64(156550), post.Images[1].Size)
 }

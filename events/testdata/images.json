@@ -14,7 +14,7 @@
         "$type": "app.bsky.embed.images",
         "images": [
           {
-            "alt": "",
+            "alt": "foo",
             "aspectRatio": {
               "height": 960,
               "width": 960
