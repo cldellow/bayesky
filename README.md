@@ -135,3 +135,15 @@ My overall hope is to do something like this:
 The Bayes classification can be farmed out amongst threads, but the overall processing needs
 to be sequential -- e.g. we have to know we've processed post X before processing any likes for it,
 or before processing replies to post X.
+
+# Golang notes
+
+It's been years since I wrote go code. I'm relying on ChatGPT a lot. Useful commands:
+
+```bash
+$ go test ./... # run all tests, recursively
+
+$ gofmt -w .    # format all files, recursively
+```
+
+I should eventually write a GitHub action and Git pre commit hook, but, lazy.
