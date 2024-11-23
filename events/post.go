@@ -16,23 +16,23 @@ type Blob struct {
 }
 
 type Image struct {
-	Alt      string
-	Height   uint64
-	Width    uint64
-	Blob     Blob 
+	Alt    string
+	Height uint64
+	Width  uint64
+	Blob   Blob
 }
 
 type Video struct {
-	Height   uint64
-	Width    uint64
-	Blob     Blob 
+	Height uint64
+	Width  uint64
+	Blob   Blob
 }
 
 type ExternalEmbed struct {
 	Description string
-	Thumb Blob
-	Title string
-	Uri string
+	Thumb       Blob
+	Title       string
+	Uri         string
 }
 
 type Post struct {
@@ -58,7 +58,7 @@ type Post struct {
 	ExternalEmbed ExternalEmbed
 
 	Images []Image
-	Video Video
+	Video  Video
 }
 
 func extractBlob(subimage map[string]interface{}) (Blob, error) {

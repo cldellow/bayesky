@@ -125,7 +125,6 @@ func TestParsePostImages2(t *testing.T) {
 	assert.Equal(t, uint64(638076), post.Images[0].Blob.Size)
 }
 
-
 func TestParsePostExternalWithThumb(t *testing.T) {
 	postBytes, err := Load("testdata/external-with-thumb.json")
 	assert.Nil(t, err)
