@@ -1,7 +1,6 @@
 package events
 
 import (
-	"fmt"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"testing"
@@ -115,7 +114,6 @@ func TestParsePostExternalWithThumb(t *testing.T) {
 
 	rv, err := ParsePost(postBytes)
 	assert.Nil(t, err)
-	fmt.Println(rv)
 	assert.Equal(t, "image/jpeg", rv.ExternalEmbed.Thumb.MimeType)
 	assert.Equal(t, uint64(91644), rv.ExternalEmbed.Thumb.Size)
 	assert.Equal(t, "bafkreiah6vp4wwac3mukki3cxsxynq5bo2yjub35ej7emlyuuv3coarw6e", rv.ExternalEmbed.Thumb.Link)
@@ -132,12 +130,21 @@ func TestParsePostFacets(t *testing.T) {
 	_, err = ParsePost(postBytes)
 	assert.Nil(t, err)
 }
+*/
 
 func TestParsePostVideo(t *testing.T) {
 	postBytes, err := Load("testdata/video.json")
 	assert.Nil(t, err)
 
-	_, err = ParsePost(postBytes)
+	rv, err := ParsePost(postBytes)
 	assert.Nil(t, err)
+
+	assert.Equal(t, "at://did:plc:d3qj2eu7mqqo5u5rcgejvuhm/app.bsky.feed.post/3lb2k44wno222", rv.Quote_uri)
+
+	assert.Equal(t, uint64(1080), rv.Video.Width)
+	assert.Equal(t, uint64(1920), rv.Video.Height)
+
+	assert.Equal(t, "bafkreieyi3vgtbjwxoxncwwkqxrglbclandonc4blslerpxm5gk42pdiqq", rv.Video.Blob.Link)
+	assert.Equal(t, "video/mp4", rv.Video.Blob.MimeType)
+	assert.Equal(t, uint64(1875400), rv.Video.Blob.Size)
 }
-*/

@@ -2,7 +2,6 @@ package events
 
 import (
 	"bytes"
-	"fmt"
 	"encoding/json"
 	"errors"
 	"strconv"
@@ -18,6 +17,12 @@ type Blob struct {
 
 type Image struct {
 	Alt      string
+	Height   uint64
+	Width    uint64
+	Blob     Blob 
+}
+
+type Video struct {
 	Height   uint64
 	Width    uint64
 	Blob     Blob 
@@ -53,6 +58,7 @@ type Post struct {
 	ExternalEmbed ExternalEmbed
 
 	Images []Image
+	Video Video
 }
 
 func extractBlob(subimage map[string]interface{}) (Blob, error) {
@@ -69,6 +75,31 @@ func extractBlob(subimage map[string]interface{}) (Blob, error) {
 	}
 	blob.Size = size
 	return blob, nil
+}
+
+func extractVideo(video map[string]interface{}) (Video, error) {
+	var rv Video
+
+	var aspectRatio = video["aspectRatio"].(map[string]interface{})
+	var widthNumber = aspectRatio["width"].(json.Number)
+	width, err := strconv.ParseUint(string(widthNumber), 10, 64)
+	if err != nil {
+		return Video{}, err
+	}
+	var heightNumber = aspectRatio["height"].(json.Number)
+	height, err := strconv.ParseUint(string(heightNumber), 10, 64)
+	if err != nil {
+		return Video{}, err
+	}
+	rv.Width = width
+	rv.Height = height
+
+	blob, err := extractBlob(video["video"].(map[string]interface{}))
+	if err != nil {
+		return Video{}, err
+	}
+	rv.Blob = blob
+	return rv, nil
 }
 
 func extractImage(image map[string]interface{}) (Image, error) {
@@ -203,7 +234,6 @@ func ParsePost(line []byte) (Post, error) {
 
 				post.Images = rv
 			} else if mediaType == "app.bsky.embed.external" {
-				fmt.Println(mediaType)
 				var external = media["external"].(map[string]interface{})
 				var thumb = external["thumb"].(map[string]interface{})
 				var img, err = extractBlob(thumb)
@@ -214,6 +244,12 @@ func ParsePost(line []byte) (Post, error) {
 				post.ExternalEmbed.Title = external["title"].(string)
 				post.ExternalEmbed.Description = external["description"].(string)
 				post.ExternalEmbed.Uri = external["uri"].(string)
+			} else if mediaType == "app.bsky.embed.video" {
+				video, err := extractVideo(media)
+				if err != nil {
+					return Post{}, nil
+				}
+				post.Video = video
 			}
 		}
 	}
