@@ -145,5 +145,3 @@ $ go test ./... # run all tests, recursively
 
 $ gofmt -w .    # format all files, recursively
 ```
-
-I should eventually write a GitHub action and Git pre commit hook, but, lazy.
