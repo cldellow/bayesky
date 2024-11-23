@@ -106,19 +106,21 @@ func extractImage(image map[string]interface{}) (Image, error) {
 	var img Image
 	img.Alt = image["alt"].(string)
 
-	var aspectRatio = image["aspectRatio"].(map[string]interface{})
-	var widthNumber = aspectRatio["width"].(json.Number)
-	width, err := strconv.ParseUint(string(widthNumber), 10, 64)
-	if err != nil {
-		return Image{}, err
+	if image["aspectRatio"] != nil {
+		var aspectRatio = image["aspectRatio"].(map[string]interface{})
+		var widthNumber = aspectRatio["width"].(json.Number)
+		width, err := strconv.ParseUint(string(widthNumber), 10, 64)
+		if err != nil {
+			return Image{}, err
+		}
+		var heightNumber = aspectRatio["height"].(json.Number)
+		height, err := strconv.ParseUint(string(heightNumber), 10, 64)
+		if err != nil {
+			return Image{}, err
+		}
+		img.Width = width
+		img.Height = height
 	}
-	var heightNumber = aspectRatio["height"].(json.Number)
-	height, err := strconv.ParseUint(string(heightNumber), 10, 64)
-	if err != nil {
-		return Image{}, err
-	}
-	img.Width = width
-	img.Height = height
 
 	blob, err := extractBlob(image["image"].(map[string]interface{}))
 	if err != nil {

@@ -108,6 +108,24 @@ func TestParsePostImages(t *testing.T) {
 	assert.Equal(t, uint64(156550), post.Images[1].Blob.Size)
 }
 
+func TestParsePostImages2(t *testing.T) {
+	postBytes, err := Load("testdata/image-no-aspect.json")
+	assert.Nil(t, err)
+
+	post, err := ParsePost(postBytes)
+	assert.Nil(t, err)
+
+	assert.Equal(t, "did:plc:v3wrmaefdkqejoz2c2fiaccl", post.Did)
+	assert.Equal(t, 1, len(post.Images))
+	assert.Equal(t, "IEMBot Image TBD", post.Images[0].Alt)
+	assert.Equal(t, uint64(0), post.Images[0].Width)
+	assert.Equal(t, uint64(0), post.Images[0].Height)
+	assert.Equal(t, "bafkreifevvbvn7lihsmnyv5qtwvgrmrydrqqtpp73lxdhbziaxjzjlysfe", post.Images[0].Blob.Link)
+	assert.Equal(t, "image/png", post.Images[0].Blob.MimeType)
+	assert.Equal(t, uint64(638076), post.Images[0].Blob.Size)
+}
+
+
 func TestParsePostExternalWithThumb(t *testing.T) {
 	postBytes, err := Load("testdata/external-with-thumb.json")
 	assert.Nil(t, err)

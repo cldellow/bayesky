@@ -1,0 +1,53 @@
+{
+  "did": "did:plc:v3wrmaefdkqejoz2c2fiaccl",
+  "time_us": 1731748104131859,
+  "kind": "commit",
+  "commit": {
+    "rev": "3lb2k5cthpa2r",
+    "operation": "create",
+    "collection": "app.bsky.feed.post",
+    "rkey": "3lb2k5ctaui2r",
+    "record": {
+      "$type": "app.bsky.feed.post",
+      "createdAt": "2024-11-16T09:08:23.446355+00:00",
+      "embed": {
+        "$type": "app.bsky.embed.images",
+        "images": [
+          {
+            "$type": "app.bsky.embed.images#image",
+            "alt": "IEMBot Image TBD",
+            "image": {
+              "$type": "blob",
+              "ref": {
+                "$link": "bafkreifevvbvn7lihsmnyv5qtwvgrmrydrqqtpp73lxdhbziaxjzjlysfe"
+              },
+              "mimeType": "image/png",
+              "size": 638076
+            }
+          }
+        ]
+      },
+      "facets": [
+        {
+          "$type": "app.bsky.richtext.facet",
+          "features": [
+            {
+              "$type": "app.bsky.richtext.facet#link",
+              "uri": "https://mesonet.agron.iastate.edu/vtec/f/2024-O-CON-KHNX-WI-Y-0058_2024-11-16T09:08Z"
+            }
+          ],
+          "index": {
+            "$type": "app.bsky.richtext.facet#byteSlice",
+            "byteEnd": 87,
+            "byteStart": 83
+          }
+        }
+      ],
+      "langs": [
+        "en"
+      ],
+      "text": "HNX continues Wind Advisory for Mojave Desert Slopes [CA] till Nov 16, 4:00 AM PST Link"
+    },
+    "cid": "bafyreicbzamgtthtfkl5tqp4b7ewjt2ztjsqjmxofouyz5p4yktx2ugtom"
+  }
+}

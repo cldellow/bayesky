@@ -47,6 +47,7 @@ func main() {
 			}
 		*/
 
+		//fmt.Println(string(line[:]))
 		_, err = events.ParsePost(line)
 		if err != nil {
 			fmt.Println("Error parsing post:", err)
