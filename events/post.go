@@ -2,6 +2,7 @@ package events
 
 import (
 	"bytes"
+	"fmt"
 	"encoding/json"
 	"errors"
 	"strconv"
@@ -16,6 +17,13 @@ type Image struct {
 	Height   uint64
 	Width    uint64
 	Link     string
+}
+
+type ExternalEmbed struct {
+	Description string
+	Thumb Image
+	Title string
+	Uri string
 }
 
 type Post struct {
@@ -37,7 +45,60 @@ type Post struct {
 	// Is this a quote?
 	Quote_uri string // commit.record.embed.record.uri
 
+	// Does this embed a link?
+	ExternalEmbed ExternalEmbed
+
 	Images []Image
+}
+
+func extractImage(image map[string]interface{}) (Image, error) {
+	var img Image
+	img.Alt = image["alt"].(string)
+
+	var aspectRatio = image["aspectRatio"].(map[string]interface{})
+	var widthNumber = aspectRatio["width"].(json.Number)
+	width, err := strconv.ParseUint(string(widthNumber), 10, 64)
+	if err != nil {
+		return Image{}, err
+	}
+	var heightNumber = aspectRatio["height"].(json.Number)
+	height, err := strconv.ParseUint(string(heightNumber), 10, 64)
+	if err != nil {
+		return Image{}, err
+	}
+	img.Width = width
+	img.Height = height
+
+	var subimage = image["image"].(map[string]interface{})
+	var ref = subimage["ref"].(map[string]interface{})
+	img.Link = ref["$link"].(string)
+	img.MimeType = subimage["mimeType"].(string)
+
+	var sizeNumber = subimage["size"].(json.Number)
+	size, err := strconv.ParseUint(string(sizeNumber), 10, 64)
+	if err != nil {
+		return Image{}, err
+	}
+	img.Size = size
+
+	return img, nil
+}
+
+func extractImages(images []interface{}) ([]Image, error) {
+	var rv []Image
+
+	// This is gross, but I don't know how to do the type cast
+	// in a syntactically cleaner way and my gpt-4o credits
+	// have run out for today. :)
+	for _, interfaceImage := range images {
+		var image = interfaceImage.(map[string]interface{})
+		var img, err = extractImage(image)
+		if err != nil {
+			return nil, err
+		}
+		rv = append(rv, img)
+	}
+	return rv, nil
 }
 
 func ParsePost(line []byte) (Post, error) {
@@ -93,44 +154,11 @@ func ParsePost(line []byte) (Post, error) {
 		var type_ = embed["$type"].(string)
 
 		if type_ == "app.bsky.embed.images" {
-			var images = embed["images"].([]interface{})
-
-			// This is gross, but I don't know how to do the type cast
-			// in a syntactically cleaner way and my gpt-4o credits
-			// have run out for today. :)
-			for _, interfaceImage := range images {
-				var image = interfaceImage.(map[string]interface{})
-				var img Image
-				img.Alt = image["alt"].(string)
-
-				var aspectRatio = image["aspectRatio"].(map[string]interface{})
-				var widthNumber = aspectRatio["width"].(json.Number)
-				width, err := strconv.ParseUint(string(widthNumber), 10, 64)
-				if err != nil {
-					return Post{}, err
-				}
-				var heightNumber = aspectRatio["height"].(json.Number)
-				height, err := strconv.ParseUint(string(heightNumber), 10, 64)
-				if err != nil {
-					return Post{}, err
-				}
-				img.Width = width
-				img.Height = height
-
-				var subimage = image["image"].(map[string]interface{})
-				var ref = subimage["ref"].(map[string]interface{})
-				img.Link = ref["$link"].(string)
-				img.MimeType = subimage["mimeType"].(string)
-
-				var sizeNumber = subimage["size"].(json.Number)
-				size, err := strconv.ParseUint(string(sizeNumber), 10, 64)
-				if err != nil {
-					return Post{}, err
-				}
-				img.Size = size
-
-				post.Images = append(post.Images, img)
+			var rv, err = extractImages(embed["images"].([]interface{}))
+			if err != nil {
+				return Post{}, err
 			}
+			post.Images = rv
 		}
 
 		// eg https://gist.github.com/cldellow/d6f5e01a86aa290745e5995c42fd4c7e
@@ -151,45 +179,25 @@ func ParsePost(line []byte) (Post, error) {
 			}
 
 			var media = embed["media"].(map[string]interface{})
-			var images = media["images"].([]interface{})
+			var mediaType = media["$type"].(string)
 
-			// This is gross, but I don't know how to do the type cast
-			// in a syntactically cleaner way and my gpt-4o credits
-			// have run out for today. :)
-			for _, interfaceImage := range images {
-				var image = interfaceImage.(map[string]interface{})
-				var img Image
-				img.Alt = image["alt"].(string)
-
-				var aspectRatio = image["aspectRatio"].(map[string]interface{})
-				var widthNumber = aspectRatio["width"].(json.Number)
-				width, err := strconv.ParseUint(string(widthNumber), 10, 64)
+			if mediaType == "app.bsky.embed.images" {
+				var rv, err = extractImages(media["images"].([]interface{}))
 				if err != nil {
-					return Post{}, err
+					return Post{}, nil
 				}
-				var heightNumber = aspectRatio["height"].(json.Number)
-				height, err := strconv.ParseUint(string(heightNumber), 10, 64)
+
+				post.Images = rv
+			} else if mediaType == "app.bsky.embed.external" {
+				fmt.Println(mediaType)
+				var external = media["external"].(map[string]interface{})
+				var thumb = external["thumb"].(map[string]interface{})
+				var img, err = extractImage(thumb)
 				if err != nil {
-					return Post{}, err
+					return Post{}, nil
 				}
-				img.Width = width
-				img.Height = height
-
-				var subimage = image["image"].(map[string]interface{})
-				var ref = subimage["ref"].(map[string]interface{})
-				img.Link = ref["$link"].(string)
-				img.MimeType = subimage["mimeType"].(string)
-
-				var sizeNumber = subimage["size"].(json.Number)
-				size, err := strconv.ParseUint(string(sizeNumber), 10, 64)
-				if err != nil {
-					return Post{}, err
-				}
-				img.Size = size
-
-				post.Images = append(post.Images, img)
+				post.ExternalEmbed.Thumb = img
 			}
-
 		}
 	}
 

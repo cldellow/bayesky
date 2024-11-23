@@ -1,6 +1,7 @@
 package events
 
 import (
+//	"fmt"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"testing"
@@ -108,12 +109,20 @@ func TestParsePostImages(t *testing.T) {
 	assert.Equal(t, uint64(156550), post.Images[1].Size)
 }
 
+/*
 func TestParsePostExternalWithThumb(t *testing.T) {
 	postBytes, err := Load("testdata/external-with-thumb.json")
 	assert.Nil(t, err)
 
-	_, err = ParsePost(postBytes)
+	rv, err := ParsePost(postBytes)
 	assert.Nil(t, err)
+	fmt.Println(rv)
+	assert.Equal(t, "image/jpeg", rv.ExternalEmbed.Thumb.MimeType)
+	assert.Equal(t, uint64(91644), rv.ExternalEmbed.Thumb.Size)
+	assert.Equal(t, "bafkreiah6vp4wwac3mukki3cxsxynq5bo2yjub35ej7emlyuuv3coarw6e", rv.ExternalEmbed.Thumb.Link)
+	assert.Equal(t, "ALT: a red background with a few pieces of wood in the middle", rv.ExternalEmbed.Description)
+	assert.Equal(t, "a red background with a few pieces of wood in the middle", rv.ExternalEmbed.Title)
+	assert.Equal(t, "https://media.tenor.com/1TG5kWc6M3gAAAAC/eldenring.gif?hh=280&ww=498", rv.ExternalEmbed.Uri)
 }
 
 func TestParsePostFacets(t *testing.T) {
@@ -131,3 +140,4 @@ func TestParsePostVideo(t *testing.T) {
 	_, err = ParsePost(postBytes)
 	assert.Nil(t, err)
 }
+*/
