@@ -1,0 +1,40 @@
+name: Go Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Check out the code
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Step 2: Set up Go
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.23' # Change to the version of Go you are using
+
+    # Step 3: Cache dependencies to speed up builds
+    - name: Cache Go modules
+      uses: actions/cache@v3
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+
+    # Step 4: Install dependencies
+    - name: Install dependencies
+      run: go mod tidy
+
+    # Step 5: Run tests
+    - name: Run tests
+      run: go test ./...
+
