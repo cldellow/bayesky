@@ -10,13 +10,17 @@ import (
 
 // Try to model the parts of Bluesky posts that we care about,
 // while being gloriously ignorant of a lot of things.
-type Image struct {
-	Alt      string
+type Blob struct {
 	MimeType string
 	Size     uint64
+	Link     string
+}
+
+type Image struct {
+	Alt      string
 	Height   uint64
 	Width    uint64
-	Link     string
+	Blob     Blob 
 }
 
 type ExternalEmbed struct {
@@ -51,6 +55,22 @@ type Post struct {
 	Images []Image
 }
 
+func extractBlob(subimage map[string]interface{}) (Blob, error) {
+	var ref = subimage["ref"].(map[string]interface{})
+	var blob Blob
+
+	blob.Link = ref["$link"].(string)
+	blob.MimeType = subimage["mimeType"].(string)
+
+	var sizeNumber = subimage["size"].(json.Number)
+	size, err := strconv.ParseUint(string(sizeNumber), 10, 64)
+	if err != nil {
+		return Blob{}, err
+	}
+	blob.Size = size
+	return blob, nil
+}
+
 func extractImage(image map[string]interface{}) (Image, error) {
 	var img Image
 	img.Alt = image["alt"].(string)
@@ -69,17 +89,11 @@ func extractImage(image map[string]interface{}) (Image, error) {
 	img.Width = width
 	img.Height = height
 
-	var subimage = image["image"].(map[string]interface{})
-	var ref = subimage["ref"].(map[string]interface{})
-	img.Link = ref["$link"].(string)
-	img.MimeType = subimage["mimeType"].(string)
-
-	var sizeNumber = subimage["size"].(json.Number)
-	size, err := strconv.ParseUint(string(sizeNumber), 10, 64)
+	blob, err := extractBlob(image["image"].(map[string]interface{}))
 	if err != nil {
 		return Image{}, err
 	}
-	img.Size = size
+	img.Blob = blob
 
 	return img, nil
 }
