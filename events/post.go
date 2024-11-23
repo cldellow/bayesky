@@ -235,12 +235,15 @@ func ParsePost(line []byte) (Post, error) {
 				post.Images = rv
 			} else if mediaType == "app.bsky.embed.external" {
 				var external = media["external"].(map[string]interface{})
-				var thumb = external["thumb"].(map[string]interface{})
-				var img, err = extractBlob(thumb)
-				if err != nil {
-					return Post{}, nil
+
+				if external["thumb"] != nil {
+					var thumb = external["thumb"].(map[string]interface{})
+					var img, err = extractBlob(thumb)
+					if err != nil {
+						return Post{}, nil
+					}
+					post.ExternalEmbed.Thumb = img
 				}
-				post.ExternalEmbed.Thumb = img
 				post.ExternalEmbed.Title = external["title"].(string)
 				post.ExternalEmbed.Description = external["description"].(string)
 				post.ExternalEmbed.Uri = external["uri"].(string)

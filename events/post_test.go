@@ -122,7 +122,6 @@ func TestParsePostExternalWithThumb(t *testing.T) {
 	assert.Equal(t, "https://media.tenor.com/1TG5kWc6M3gAAAAC/eldenring.gif?hh=280&ww=498", rv.ExternalEmbed.Uri)
 }
 
-/*
 func TestParsePostFacets(t *testing.T) {
 	postBytes, err := Load("testdata/facets.json")
 	assert.Nil(t, err)
@@ -130,7 +129,6 @@ func TestParsePostFacets(t *testing.T) {
 	_, err = ParsePost(postBytes)
 	assert.Nil(t, err)
 }
-*/
 
 func TestParsePostVideo(t *testing.T) {
 	postBytes, err := Load("testdata/video.json")
