@@ -25,7 +25,7 @@ type Image struct {
 
 type ExternalEmbed struct {
 	Description string
-	Thumb Image
+	Thumb Blob
 	Title string
 	Uri string
 }
@@ -206,11 +206,14 @@ func ParsePost(line []byte) (Post, error) {
 				fmt.Println(mediaType)
 				var external = media["external"].(map[string]interface{})
 				var thumb = external["thumb"].(map[string]interface{})
-				var img, err = extractImage(thumb)
+				var img, err = extractBlob(thumb)
 				if err != nil {
 					return Post{}, nil
 				}
 				post.ExternalEmbed.Thumb = img
+				post.ExternalEmbed.Title = external["title"].(string)
+				post.ExternalEmbed.Description = external["description"].(string)
+				post.ExternalEmbed.Uri = external["uri"].(string)
 			}
 		}
 	}

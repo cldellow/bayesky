@@ -1,7 +1,7 @@
 package events
 
 import (
-//	"fmt"
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"testing"
@@ -109,7 +109,6 @@ func TestParsePostImages(t *testing.T) {
 	assert.Equal(t, uint64(156550), post.Images[1].Blob.Size)
 }
 
-/*
 func TestParsePostExternalWithThumb(t *testing.T) {
 	postBytes, err := Load("testdata/external-with-thumb.json")
 	assert.Nil(t, err)
@@ -125,6 +124,7 @@ func TestParsePostExternalWithThumb(t *testing.T) {
 	assert.Equal(t, "https://media.tenor.com/1TG5kWc6M3gAAAAC/eldenring.gif?hh=280&ww=498", rv.ExternalEmbed.Uri)
 }
 
+/*
 func TestParsePostFacets(t *testing.T) {
 	postBytes, err := Load("testdata/facets.json")
 	assert.Nil(t, err)
